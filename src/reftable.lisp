@@ -92,10 +92,12 @@
                        (notice-recursively k context)
                        (notice-recursively v context)))
             ((or string package symbol r-ref pointer))
-            (t (let ((encoded-alist (encode-object object)))
-                 (notice-recursively encoded-alist context)
-                 (setf (gethash object (ref-context-encoded-objects context))
-                       encoded-alist))))))))
+            (t
+             (notice-recursively (object-class-identifier object))
+             (let ((encoded-alist (encode-object object)))
+               (notice-recursively encoded-alist context)
+               (setf (gethash object (ref-context-encoded-objects context))
+                     encoded-alist))))))))
 
 (defun referrable-p (object)
   (or (typep object 'sequence)
